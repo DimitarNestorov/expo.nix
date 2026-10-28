@@ -1,0 +1,23 @@
+name: Build Expo Go
+
+on:
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Version"
+                required: true
+                type: choice
+                options:
+                    - 58.0.5-android
+
+jobs:
+    build:
+        runs-on: ubuntu-26.04
+        steps:
+            - uses: actions/checkout@v6
+            - uses: DeterminateSystems/nix-installer-action@main
+            - run: bash scripts/build-expo-go-${{ inputs.version }}.sh
+            - uses: actions/upload-artifact@v7
+              with:
+                  name: app-mobile-release.apk
+                  path: expo/apps/expo-go/android/app/build/outputs/apk/mobile/release/app-mobile-release.apk
